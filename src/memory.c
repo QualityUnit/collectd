@@ -315,11 +315,10 @@ static int memory_read (void)
 
 	if (mem_used >= (mem_free + mem_buffered + mem_cached))
 	{
-		mem_used -= mem_free + mem_buffered + mem_cached;
-
 		if (mem_avail > 0) {
-			mem_used = mem_avail;
+			mem_free = mem_avail;
 		}
+		mem_used -= mem_free + mem_buffered + mem_cached;
 
 		memory_submit ("used",     mem_used);
 		memory_submit ("buffered", mem_buffered);
