@@ -271,6 +271,7 @@ static int memory_read (void)
 	long long mem_buffered = 0;
 	long long mem_cached = 0;
 	long long mem_free = 0;
+	long long mem_avail = 0;
 
 	if ((fh = fopen ("/proc/meminfo", "r")) == NULL)
 	{
@@ -292,6 +293,8 @@ static int memory_read (void)
 			val = &mem_buffered;
 		else if (strncasecmp (buffer, "Cached:", 7) == 0)
 			val = &mem_cached;
+		else if (strncasecmp (buffer, "MemAvailable:", 13) == 0)
+			val = &mem_avail;
 		else
 			continue;
 
@@ -313,6 +316,11 @@ static int memory_read (void)
 	if (mem_used >= (mem_free + mem_buffered + mem_cached))
 	{
 		mem_used -= mem_free + mem_buffered + mem_cached;
+
+		if (mem_avail > 0) {
+			mem_used = mem_avail;
+		}
+
 		memory_submit ("used",     mem_used);
 		memory_submit ("buffered", mem_buffered);
 		memory_submit ("cached",   mem_cached);
