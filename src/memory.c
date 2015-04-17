@@ -313,12 +313,17 @@ static int memory_read (void)
 				sstrerror (errno, errbuf, sizeof (errbuf)));
 	}
 
+
 	if (mem_used >= (mem_free + mem_buffered + mem_cached))
 	{
+		memory_submit ("total", mem_used);
+
 		if (mem_avail > 0) {
 			mem_free = mem_avail;
+		    mem_used -= mem_avail;
+		} else {
+		    mem_used -= mem_free + mem_buffered + mem_cached;
 		}
-		mem_used -= mem_free + mem_buffered + mem_cached;
 
 		memory_submit ("used",     mem_used);
 		memory_submit ("buffered", mem_buffered);
