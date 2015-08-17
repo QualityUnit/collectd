@@ -602,7 +602,7 @@ static int cdbi_read_database_query (cdbi_database_t *db, /* {{{ */
 
   udb_query_prepare_result (q, prep_area, (db->host ? db->host : hostname_g),
       /* plugin = */ "dbi", db->name,
-      column_names, column_num, /* interval = */ (db->interval > 0) ? db->interval : 0));
+      column_names, column_num, /* interval = */ (db->interval > 0) ? db->interval : 0);
 
   /* 0 = error; 1 = success; */
   status = dbi_result_first_row (res); /* {{{ */
